@@ -1,29 +1,114 @@
+##############################
 # Compiled Object files
+##############################
 *.slo
 *.lo
 *.o
 *.obj
 
+##############################
 # Precompiled Headers
+##############################
 *.gch
 *.pch
 
+##############################
 # Compiled Dynamic libraries
+##############################
 *.so
 *.dylib
 *.dll
 
+##############################
 # Fortran module files
+##############################
 *.mod
 *.smod
 
+##############################
 # Compiled Static libraries
+##############################
 *.lai
 *.la
 *.a
 *.lib
 
+##############################
 # Executables
+##############################
 *.exe
 *.out
 *.app
+
+##############################
+# Directories
+##############################
+build/
+lib/*
+bin/**
+
+##############################
+# Windows image file caches
+##############################
+Thumbs.db
+
+##############################
+# Thumbnails
+##############################
+._*
+
+##############################
+# OS Files
+##############################
+.DS_Store
+
+##############################
+# Eclipse
+##############################
+*.pydevproject
+.metadata
+.project
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+/src/main/resources/rebel.xml
+# External tool builders
+.externalToolBuilders/
+
+##############################
+# IntelliJ Idea
+##############################
+idea/
+out/
+build/
+cmake-build-debug/
+CMakeLists.txt
+*.iml
+*.iws
+*.ipr
+.idea
+.gradle
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+.idea/gradle.xml
+.idea/libraries
+.idea/mongoSettings.xml
+.idea_modules/
+atlassian-ide-plugin.xml
