@@ -1,46 +1,80 @@
-
-# HIL: No spaces or comments after otherwise it captures them!
 # Determine the platform
 UNAME_S := $(shell uname -s)
 
-# CC
+#================================
+#
+#================================
 ifeq ($(UNAME_S),Darwin)
-  CC := clang++ -arch x86_64
+  CXX := clang++ -arch x86_64
 else
-  CC := g++
+  CXX := g++
 endif
+CXXFLAGS := -g
+LDFLAGS  :=
+BUILD_DIR    := ./build
+OBJ_DIR  := $(BUILD_DIR)/objects
+APP_DIR  := $(BUILD_DIR)/apps
+TARGET   := program
+INCLUDE  := -I include/
+SRC      := $(shell find src -type f -name *.cpp)
+# SRC      :=                      \
+#    $(wildcard src/helloworld/*.cpp) \
+#    $(wildcard src/datatypes/*.cpp) \
+#    $(wildcard src/*.cpp)         \
 
+OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
-SRCDIR := src
-BUILDDIR := build
-TARGET := bin/runner
- 
-SRCEXT := cpp
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -g # -Wall
-#LIB := -pthread -lmongoclient -L lib -lboost_thread-mt -lboost_filesystem-mt -lboost_system-mt
-LIB := 
-INC := -I include
+#================================
+#
+#================================
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
 
-$(TARGET): $(OBJECTS)
-	@echo " Linking..."
-	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+#================================
+#
+#================================
+$(APP_DIR)/$(TARGET): $(OBJECTS)
+	@echo "Linking ..."
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $(APP_DIR)/$(TARGET) $(OBJECTS)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
-	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
-
-clean:
-	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
-
-# Tests
-tester:
-	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
-
-# Spikes
-ticket:
-	$(CC) $(CFLAGS) spikes/ticket.cpp $(INC) $(LIB) -o bin/ticket
-
+#================================
+#
+#================================
 .PHONY: clean
+
+#================================
+#
+#================================
+build:
+	@echo "Building ..."
+	@mkdir -p $(APP_DIR)
+	@mkdir -p $(OBJ_DIR)
+
+#================================
+#
+#================================
+clean:
+	@echo "Cleaning ..."
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(APP_DIR)/*
+
+#================================
+#
+#================================
+print:
+	@echo " SRC: ${SRC}"
+	@echo " OBJECTS: ${OBJECTS}"
+	@echo " BUILD_DIR: ${BUILD_DIR}"
+	@echo " OBJ_DIR: ${OBJ_DIR}"
+	@echo " APP_DIR: ${APP_DIR}"
+	@echo " TARGET: ${TARGET}"
+	@echo " INCLUDE: ${INCLUDE}"
+	@echo " CXXFLAGS: ${CXXFLAGS}"
+	@echo " LDFLAGS: ${LDFLAGS}"
+
+#================================
+#
+#================================
+all: print clean build $(APP_DIR)/$(TARGET)
